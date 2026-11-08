@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f1e6">
+  <meta name="description" content="매일 새로운 우리말 어휘를 만나는 작은 문학 단어장">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <title>매일의 단어</title>
+  <style>
+    :root { color-scheme: light; --paper:#fbf7ef; --ink:#493b2e; --muted:#887b69; --sage:#899178; --line:#e8dece; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; background:#eee8dc; color:var(--ink); font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif; display:flex; justify-content:center; }
+    main { width:min(100%,520px); min-height:100vh; padding:24px 18px 36px; background:var(--paper); }
+    header { display:flex; justify-content:space-between; align-items:center; margin:8px 2px 28px; }
+    .brand { font-size:13px; letter-spacing:.12em; color:var(--muted); }
+    .date { font-size:12px; color:var(--muted); }
+    .card { border:1px solid var(--line); border-radius:22px; padding:26px 20px 22px; background:#fffdf8; box-shadow:0 8px 24px #57452a0c; text-align:center; }
+    .eyebrow { font-size:11px; letter-spacing:.16em; color:var(--sage); font-weight:700; }
+    h1 { font-family:Georgia,serif; font-size:38px; margin:14px 0 2px; letter-spacing:.02em; }
+    .part { font-size:12px; color:var(--muted); margin-bottom:22px; }
+    .meaning { font-size:16px; line-height:1.75; word-break:keep-all; margin:0 auto 14px; }
+    .example { border-top:1px solid var(--line); margin-top:20px; padding-top:17px; color:#766854; font-size:13px; line-height:1.7; word-break:keep-all; }
+    .example b { display:block; color:var(--sage); font-size:10px; letter-spacing:.1em; margin-bottom:6px; }
+    .syn { font-size:12px; color:var(--muted); margin-top:14px; }
+    .actions { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:16px; }
+    button,a.button { border:0; border-radius:14px; padding:13px 10px; font:inherit; font-size:13px; text-decoration:none; text-align:center; cursor:pointer; }
+    .primary { background:var(--sage); color:white; }
+    .secondary { background:#eee7da; color:#5f503f; }
+    .tools { display:flex; justify-content:space-between; align-items:center; margin:24px 4px 10px; }
+    .tools h2 { font-size:14px; margin:0; }
+    .small { border:1px solid var(--line); background:transparent; color:var(--muted); padding:7px 10px; border-radius:10px; font-size:12px; }
+    #saved { font-size:13px; line-height:1.8; color:var(--muted); }
+    .saved-item { display:flex; justify-content:space-between; border-bottom:1px solid var(--line); padding:9px 2px; gap:12px; }
+    .saved-item button { padding:2px 7px; background:transparent; color:#887b69; }
+    footer { text-align:center; color:#a69a88; font-size:11px; margin-top:30px; line-height:1.7; }
+  </style>
+</head>
+<body>
+<main>
+  <header><div class="brand">작은 어휘 수집실</div><div class="date" id="today"></div></header>
+  <section class="card">
+    <div class="eyebrow">TODAY'S WORD · 오늘의 단어</div>
+    <h1 id="word">침잠</h1>
+    <div class="part" id="part">명사</div>
+    <p class="meaning" id="meaning"></p>
+    <div class="example"><b>EXAMPLE</b><span id="example"></span></div>
+    <div class="syn" id="syn"></div>
+  </section>
+  <div class="actions">
+    <button class="primary" id="random">↻ 다른 단어 뽑기</button>
+    <button class="secondary" id="favorite">♡ 단어 저장</button>
+    <a class="button secondary" id="naver" target="_blank" rel="noopener">네이버 사전 ↗</a>
+    <button class="secondary" id="share">단어 공유</button>
+  </div>
+  <section>
+    <div class="tools"><h2>내가 모은 단어</h2><button class="small" id="clear">저장 목록 비우기</button></div>
+    <div id="saved">아직 저장한 단어가 없어요.</div>
+  </section>
+  <footer>하루 한 단어, 어제보다 넓어진 어휘.<br>뜻과 표제어는 학습용 요약이며, 정확한 사전 풀이는 네이버 국어사전에서 확인하세요.</footer>
+</main>
+<script>
+const words = [
+ {w:"침잠",p:"명사",m:"마음이 가라앉아 깊이 잠김. 또는 그런 상태.",e:"그는 고요한 침잠 속에서 오래도록 생각에 잠겼다.",s:"몰입, 잠김"},
+ {w:"여울",p:"명사",m:"강이나 바다의 바닥이 얕거나 폭이 좁아 물살이 세게 흐르는 곳.",e:"달빛이 여울 위에서 잘게 부서졌다.",s:"물목"},
+ {w:"윤슬",p:"명사",m:"햇빛이나 달빛에 비치어 반짝이는 잔물결.",e:"호수에는 오후의 윤슬이 반짝였다.",s:"물비늘"},
+ {w:"미립",p:"명사",m:"경험을 통하여 얻은 묘한 이치나 요령.",e:"그는 오랜 세월 끝에 세상살이의 미립을 터득했다.",s:"요령, 이치"},
+ {w:"적요",p:"명사",m:"적적하고 고요함.",e:"마을에는 깊은 적요가 내려앉았다.",s:"고요, 적막"},
+ {w:"아스라하다",p:"형용사",m:"보기에 아슬아슬할 만큼 높거나 까마득하다.",e:"산등성이가 안개 너머로 아스라하게 보였다.",s:"아득하다, 까마득하다"},
+ {w:"갈무리",p:"명사",m:"물건 따위를 잘 정리하거나 간수함.",e:"그는 편지를 상자에 갈무리했다.",s:"정리, 간수"},
+ {w:"무람없다",p:"형용사",m:"예의를 지키지 않으며 삼가고 조심하는 것이 없다.",e:"그는 처음 만난 사람에게 무람없이 말을 놓았다.",s:"버릇없다, 거리낌없다"},
+ {w:"수런거리다",p:"동사",m:"여러 사람이 한데 모여 웅성웅성 말하다.",e:"복도 끝에서 학생들이 수런거리는 소리가 들렸다.",s:"웅성거리다"},
+ {w:"해사하다",p:"형용사",m:"얼굴이 희고 곱다랗다.",e:"창백한 얼굴에 해사한 미소가 번졌다.",s:"곱다"},
+ {w:"잠식",p:"명사",m:"경계나 영역 따위를 조금씩 침노하여 먹어 들어감.",e:"불안이 그의 일상을 조금씩 잠식했다.",s:"침식, 침범"},
+ {w:"공허",p:"명사",m:"아무것도 없이 텅 빔. 또는 그런 느낌.",e:"소란이 지나간 자리에는 공허만 남았다.",s:"허전함, 빈자리"},
+ {w:"완연하다",p:"형용사",m:"눈에 뚜렷하다.",e:"창밖에는 봄기운이 완연했다.",s:"뚜렷하다, 역력하다"},
+ {w:"희구",p:"명사",m:"바라고 구함.",e:"그는 평온한 삶을 희구했다.",s:"갈망, 소망"},
+ {w:"부유",p:"명사",m:"한곳에 머물지 않고 떠다님.",e:"먼지 입자들이 햇살 속을 부유했다.",s:"표류"},
+ {w:"망연하다",p:"형용사",m:"아득하고 멀어 막연하다.",e:"그는 망연한 표정으로 먼 곳을 바라보았다.",s:"막연하다, 아득하다"},
+ {w:"파문",p:"명사",m:"수면에 이는 물결. 또는 어떤 일이 다른 데에 미치는 영향.",e:"그 소식은 작은 마을에 큰 파문을 일으켰다.",s:"물결, 여파"},
+ {w:"정취",p:"명사",m:"깊은 정서를 자아내는 흥취.",e:"비 내리는 골목에는 오래된 정취가 남아 있었다.",s:"운치, 풍취"},
+ {w:"배회",p:"명사",m:"아무 목적도 없이 어떤 곳을 이리저리 돌아다님.",e:"그는 잠들지 못하고 밤거리를 배회했다.",s:"방황, 서성임"},
+ {w:"간극",p:"명사",m:"사이 또는 틈.",e:"두 사람의 생각에는 좁히기 어려운 간극이 있었다.",s:"틈, 격차"},
+ {w:"음울하다",p:"형용사",m:"기분이나 분위기 따위가 어둡고 침울하다.",e:"회색 하늘이 도시를 음울하게 감쌌다.",s:"침울하다, 어둡다"},
+ {w:"청명하다",p:"형용사",m:"날씨가 맑고 밝다. 소리가 맑고 아름답다.",e:"새벽 공기는 유난히 청명했다.",s:"맑다, 투명하다"}
+];
+const $ = id => document.getElementById(id);
+let current;
+const saved = () => JSON.parse(localStorage.getItem("maeilSaved") || "[]");
+function show(item) {
+ current=item; $("word").textContent=item.w; $("part").textContent=item.p;
+ $("meaning").textContent=item.m; $("example").textContent="“"+item.e+"”";
+ $("syn").textContent="비슷한 말  "+item.s;
+ $("naver").href="https://dict.naver.com/search.dict?query="+encodeURIComponent(item.w);
+ $("favorite").textContent=saved().some(x=>x.w===item.w)?"♥ 저장됨":"♡ 단어 저장";
+}
+function daily() {
+ const now=new Date(); $("today").textContent=now.getFullYear()+"."+String(now.getMonth()+1).padStart(2,"0")+"."+String(now.getDate()).padStart(2,"0");
+ const key="maeilDaily_"+now.toDateString();
+ let chosen=localStorage.getItem(key);
+ if(!chosen) { chosen=words[Math.floor(Math.random()*words.length)].w; localStorage.setItem(key,chosen); }
+ show(words.find(x=>x.w===chosen)||words[0]);
+}
+function renderSaved(){
+ const list=saved(); $("saved").innerHTML="";
+ if(!list.length){$("saved").textContent="아직 저장한 단어가 없어요.";return;}
+ list.forEach(item=>{
+  const row=document.createElement("div");row.className="saved-item";
+  const label=document.createElement("span");label.textContent=item.w+" — "+item.m;
+  const btn=document.createElement("button");btn.textContent="삭제";
+  btn.onclick=()=>{localStorage.setItem("maeilSaved",JSON.stringify(saved().filter(x=>x.w!==item.w)));renderSaved();show(current);};
+  row.append(label,btn);$("saved").append(row);
+ });
+}
+$("random").onclick=()=>show(words[Math.floor(Math.random()*words.length)]);
+$("favorite").onclick=()=>{
+ const list=saved();
+ if(!list.some(x=>x.w===current.w)) list.unshift(current);
+ localStorage.setItem("maeilSaved",JSON.stringify(list));renderSaved();show(current);
+};
+$("clear").onclick=()=>{if(confirm("저장한 단어를 모두 지울까요?")){localStorage.removeItem("maeilSaved");renderSaved();show(current);}};
+$("share").onclick=async()=>{
+ const text=current.w+" ("+current.p+")\n"+current.m+"\n예문: "+current.e;
+ if(navigator.share){try{await navigator.share({title:"오늘의 단어: "+current.w,text});}catch(e){}}
+ else if(navigator.clipboard){await navigator.clipboard.writeText(text);alert("단어 내용을 복사했어요.");}
+ else alert(text);
+};
+daily();renderSaved();
+if("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("./sw.js").catch(()=>{});
+</script>
+</body>
+</html>

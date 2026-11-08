@@ -1,0 +1,10 @@
+{
+  "name": "매일의 단어",
+  "short_name": "오늘의 단어",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#fbf7ef",
+  "theme_color": "#f7f1e6",
+  "description": "매일 새로운 우리말 어휘를 만나는 작은 문학 단어장",
+  "icons": [{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any"}]
+}
